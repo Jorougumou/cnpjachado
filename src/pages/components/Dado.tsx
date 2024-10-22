@@ -1,7 +1,15 @@
 import closebtn from '../../../public/assets/icons8-fechar-janela-28.png'
 import item from '../../../public/assets/lista.png'
 import Image from "next/image";
-export default function Dado(props:any) {
+
+interface dadotype {
+    identf:string,
+    titulo:string,
+    dados:string
+
+}
+
+export default function Dado(props:dadotype) {
 
     function esconder() {
         let div:any = document.getElementById(props.identf)

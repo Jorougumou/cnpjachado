@@ -38,20 +38,20 @@ export default function Home() {
     if (contres != 0) {
     let r = respost
 
-    setListitem([
-      r.taxId,r.alias,r.founded,
-    ])}
+    // setListitem([
+    //   r.taxId,r.alias,r.founded,
+    // ])
 
-    setKeyitem([
-      'Id','Nome Fantasia','Data de criação',
-    ])
+    // setKeyitem([
+    //   'Id','Nome Fantasia','Data de criação',
+    // ])
 
     let valorefemero: Array<string> =[]
     respost.company.members.forEach((element : any) => {
       valorefemero.push(element)
     });
     setItemmember(valorefemero)
-
+  }
   },[respost])
 
 
@@ -98,7 +98,10 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col justify-around items-center border border-black w-4/5 h-[530px]">
-          {}
+        <Dado dados={respost.taxIdid} identf='1' titulo='Id empresa' />
+          <Dado dados={respost.alias} identf='2' titulo='Nome' />
+          <Dado dados={respost.founded} identf="3" titulo="Fundada em"/>
+          {/* corrigir este 3 componentes */}
         </div>
 
       </div>
