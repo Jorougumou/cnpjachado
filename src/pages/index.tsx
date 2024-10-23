@@ -5,6 +5,7 @@ import localFont from "next/font/local";
 import { use, useEffect,useState } from "react";
 import cnpjimg from '../../public/assets/icones_350-x-350_px_final_05.png'
 import { json } from "stream/consumers";
+var estadoresp = false
 
 
 const geistSans = localFont({
@@ -25,7 +26,7 @@ export default function Home() {
   const [itemmember,setItemmember] = useState<object>()
 
 
-  var contres = 0
+
 
 
   const dimcnpj = 60 /* dimensões da imagem cnpj */
@@ -35,38 +36,34 @@ export default function Home() {
   },[])
 
   useEffect(() => {
-    if (contres != 0) {
-    let r = respost
+     try {
+      let comp1:any = document.getElementById(respost.taxId)
+      let comp2:any = document.getElementById(respost.company.name)
+      let comp3:any = document.getElementById(respost.founded)
+      let comp4:any = document.getElementById(respost.mainActivity.text)
+      comp1.style.display = "grid" 
+      comp2.style.display = "grid"
+      comp3.style.display = "grid"
+      comp4.style.display = "grid"
 
-    // setListitem([
-    //   r.taxId,r.alias,r.founded,
-    // ])
-
-    // setKeyitem([
-    //   'Id','Nome Fantasia','Data de criação',
-    // ])
-
-    let valorefemero: Array<string> =[]
-    respost.company.members.forEach((element : any) => {
-      valorefemero.push(element)
-    });
-    setItemmember(valorefemero)
-  }
+     } catch (error) {
+      console.log(error)
+      
+     }
   },[respost])
 
 
   async function Buscarcnpj() {
     loadingon()
-    let codigo:any = document.getElementById('pesquisa')
-    codigo = codigo?.innerHTML
-    codigo = '07526557011659'
+    let codigo = (document.getElementById('pesquisa') as HTMLInputElement).value
+      
     let caminho = `https://open.cnpja.com/office/${codigo}`
-    let resp = await fetch(caminho)
+    let resp:any = await fetch(caminho)
     resp = await resp.json()
-    console.log(resp)
+    estadoresp = true
     setRespost(resp)
     loadingoff()
-    
+   
    
   }
 
@@ -80,12 +77,11 @@ export default function Home() {
     carregador.style.display = 'none'
   }
 
-  
 
   return (
-    <div className="relative w-full flex justify-center items-start h-[100vh]">
+    <div className="relative  w-full flex justify-center items-start h-[100vh]">
       <Loading identf='Loader' />
-      <div className="w-4/5 border border-black h-[600px] flex flex-col mt-12 items-center  ">
+      <div id="corpo" className="w-4/5 bg-gray-200 flex flex-col mt-12 items-center h-[700px] ">
         <div className=" bg-cyan-600 w-full h-16 flex justify-around items-center">
           <div className="flex items-center ml-6">
             <Image  src={cnpjimg} alt="foto buscarcnpj" width={dimcnpj} height={dimcnpj} />
@@ -97,11 +93,17 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex flex-col justify-around items-center border border-black w-4/5 h-[530px]">
-        <Dado dados={respost.taxIdid} identf='1' titulo='Id empresa' />
-          <Dado dados={respost.alias} identf='2' titulo='Nome' />
-          <Dado dados={respost.founded} identf="3" titulo="Fundada em"/>
-          {/* corrigir este 3 componentes */}
+        <div className="flex flex-col  justify-around items-center  w-full ">
+          {estadoresp !=false&&(
+          <>
+            <Dado dados={respost.taxId} identf={respost.taxId} titulo='Id empresa' />
+            <Dado dados={respost.company.name} identf={respost.company.name} titulo='Nome' />
+            <Dado dados={respost.founded} identf={respost.founded} titulo="Fundada em"/>
+            <Dado dados={respost.mainActivity.text} identf={respost.mainActivity.text} titulo="Atividade principal"/>
+            <Dado dados={respost.company.size.text} identf={respost.company.size.text} titulo="tamanho"/>
+          
+          </>
+          )}
         </div>
 
       </div>
